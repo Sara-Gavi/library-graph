@@ -1,0 +1,286 @@
+/* Variables de color*/
+:root {
+  --bg-color: #f9f7f2;
+
+  --primary-color: #e07a5f;
+  --secondary-color: #f2cc8f;
+  --accent-color: #a8dadc;
+
+  --text-dark: #3d405b;
+  --text-light: #818181;
+
+  --card-bg: #ffffff;
+  --border-color: #eaeaea;
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos generales de la página */
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  background: linear-gradient(135deg, var(--bg-color) 0%, #f0ebe0 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header superior */
+.main-header {
+  background-color: var(--card-bg);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.brand-text h1 {
+  font-size: 1.4rem;
+  color: var(--primary-color);
+}
+
+.brand-text p {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* Contenedor principal */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 20px;
+  flex: 1;
+}
+
+/* Barra de búsqueda */
+.search-section {
+  margin-bottom: 25px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--primary-color);
+}
+
+.search-note {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-style: italic;
+  margin-left: 5px;
+}
+
+/* Grid del contenido: grafo a la izquierda, detalles a la derecha */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Tarjetas (cards) */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-color);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h2 {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+/* Contenedor del grafo (dentro se dibuja Cytoscape) */
+.graph-canvas {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  background-color: #fafafa;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Cuando el grafo está activo, cambiamos a un borde normal */
+.graph-canvas.graph-ready {
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+}
+
+.placeholder-message {
+  text-align: center;
+  color: var(--text-light);
+}
+
+/* Estado superior (Modo: Mock) */
+.status-badge {
+  background-color: var(--secondary-color);
+  color: #5d4037;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Leyenda del grafo */
+.legend {
+  margin-top: 15px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.legend-item {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-book {
+  background-color: var(--primary-color);
+}
+
+.dot-category {
+  background-color: var(--accent-color);
+}
+
+/* Panel lateral */
+.divider {
+  border: 0;
+  height: 1px;
+  background: #eee;
+  margin: 20px 0;
+}
+
+.help-section h3 {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.help-section ul {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.help-section li {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 5px;
+}
+
+.text-placeholder {
+  color: var(--text-light);
+}
+
+/* Botones */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: #5d4037;
+  margin-left: 5px;
+}
+
+.btn-small {
+  background-color: #eee;
+  color: var(--text-dark);
+}
+
+/* Footer */
+.main-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsive*/
+@media (max-width: 768px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .header-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
