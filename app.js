@@ -1,16 +1,24 @@
-/* =========================================================
-   Library Graph - Código del proyecto (JavaScript)
-   Este archivo:
-   - Carga datos mock (nodos y relaciones)
-   - Crea el grafo con Cytoscape dentro de #graphArea
+/* 
+   Library Graph - JavaScript
+   - Controla la landing (mostrar/ocultar)
+   - Inicializa el grafo con Cytoscape cuando empieza la app
    - Gestiona búsqueda, selección de nodos y botones
-========================================================= */
+ */
 
-/* Referencias a elementos HTML */
+/*Elementos de la landing y app */
+
+const startButton = document.querySelector(".js-start");
+const landingSection = document.querySelector(".landing");
+const appRoot = document.getElementById("appRoot");
+
+/* Título clicable para volver a la landing */
+const brandTitle = document.getElementById("brandTitle");
+
+/* Referencias a la interfaz de la app */
 
 const inputBusqueda = document.getElementById("searchInput");
 const botonLimpiar = document.getElementById("btnClear");
-const botonEncajar = document.getElementById("btnFit");
+const botonVerCompleto = document.getElementById("btnFit");
 const botonReset = document.getElementById("btnReset");
 
 const panelDetalles = document.getElementById("detailsContent");
@@ -18,13 +26,12 @@ const graphArea = document.getElementById("graphArea");
 const placeholder = document.getElementById("placeholderMessage");
 const statusBadge = document.getElementById("statusBadge");
 
-/* Instancia del grafo (Cytoscape la crea cuando inicializamos) */
+/* Instancia de Cytoscape (se crea al iniciar el grafo) */
 let cy = null;
 
-/* Datos mock del grafo
-   Formato Cytoscape:
-   - nodes: { data: { id, label, type } }
-   - edges: { data: { id, source, target, type } } */
+/* 
+   Datos mock del grafo
+ */
 
 const MOCK_GRAPH = {
   nodes: [
@@ -83,37 +90,61 @@ const MOCK_GRAPH = {
   ],
 };
 
-/*Función principal: carga y muestra el grafo */
+/* Navegación: landing - app*/
+
+function startApp() {
+  if (landingSection) landingSection.style.display = "none";
+  if (appRoot) appRoot.hidden = false;
+
+  loadGraph();
+}
+
+function goToLanding() {
+  if (appRoot) appRoot.hidden = true;
+  if (landingSection) landingSection.style.display = "block";
+
+  /* Si el grafo existe, lo destruimos para evitar errores al volver a entrar */
+  if (cy) {
+    cy.destroy();
+    cy = null;
+  }
+
+  /* Dejamos el input limpio por si se vuelve a entrar */
+  if (inputBusqueda) inputBusqueda.value = "";
+
+  /* Volvemos a mostrar el placeholder visual  */
+  if (placeholder) placeholder.style.display = "block";
+  if (graphArea) graphArea.classList.remove("graph-ready");
+
+  /* Restauramos el panel de detalles */
+  setDefaultDetails();
+}
+
+/* Eventos de navegación */
+if (startButton) startButton.addEventListener("click", startApp);
+if (brandTitle) brandTitle.addEventListener("click", goToLanding);
+
+/* Carga del grafo (mock) */
 
 function loadGraph() {
   const elements = MOCK_GRAPH.nodes.concat(MOCK_GRAPH.edges);
 
-  /* Se oculta el placeholder */
   if (placeholder) placeholder.style.display = "none";
-  graphArea.classList.add("graph-ready");
+  if (graphArea) graphArea.classList.add("graph-ready");
 
-  /* texto del estado simple */
   if (statusBadge) statusBadge.textContent = "Modo: Mock";
 
   initCytoscape(elements);
   setDefaultDetails();
 }
 
-/*Detalles por defecto en el panel lateral*/
-
 function setDefaultDetails() {
+  if (!panelDetalles) return;
   panelDetalles.innerHTML =
     '<p class="text-placeholder">Haz click en un nodo para ver información.</p>';
 }
 
-/* =========================================================
-   BLOQUE DE CYTOSCAPE (Librería)
-   Se usa Cytoscape para crear el grafo.
-   Este bloque depende de la librería Cytoscape:
-   - cytoscape({ ... })
-   - estilos con selector "node", "edge"
-   - layout, eventos (cy.on)
-========================================================= */
+/* Cytoscape: creación del grafo, estilos y eventos */
 
 function initCytoscape(elements) {
   cy = cytoscape({
@@ -187,8 +218,6 @@ function initCytoscape(elements) {
   registerNodeClick();
 }
 
-/* Click en un nodo: resaltar relaciones y mostrar detalles */
-
 function registerNodeClick() {
   cy.on("tap", "node", function (evt) {
     const node = evt.target;
@@ -204,28 +233,19 @@ function registerNodeClick() {
         return n.id() !== node.id();
       });
 
-    fadeAll();
-    showSelection(node, neighbors);
+    cy.elements().addClass("faded");
+
+    node.removeClass("faded");
+    node.connectedEdges().removeClass("faded");
+    neighbors.removeClass("faded");
 
     renderDetails(label, type, neighbors);
   });
 }
 
-/* Funciones de apoyo para selección (resaltado) */
-
-function fadeAll() {
-  cy.elements().addClass("faded");
-}
-
-function showSelection(node, neighbors) {
-  node.removeClass("faded");
-  node.connectedEdges().removeClass("faded");
-  neighbors.removeClass("faded");
-}
-
-/* Render de detalles en el panel lateral */
-
 function renderDetails(label, type, neighbors) {
+  if (!panelDetalles) return;
+
   let html = "";
   html += '<h3 style="margin-bottom:8px;">' + label + "</h3>";
   html += '<p style="margin-bottom:10px;">' + type + "</p>";
@@ -241,7 +261,7 @@ function renderDetails(label, type, neighbors) {
   panelDetalles.innerHTML = html;
 }
 
-/* Búsqueda: resalta nodos que coinciden con el texto */
+/* Búsqueda*/
 
 function applySearch(query) {
   if (!cy) return;
@@ -267,33 +287,39 @@ function applySearch(query) {
   }
 }
 
-/* Eventos de la interfaz (botones e input)*/
+/* 
+   Eventos de botones e input
+ */
 
-botonLimpiar.addEventListener("click", function () {
-  inputBusqueda.value = "";
-  applySearch("");
-  setDefaultDetails();
-});
+if (botonLimpiar) {
+  botonLimpiar.addEventListener("click", function () {
+    inputBusqueda.value = "";
+    applySearch("");
+    setDefaultDetails();
+  });
+}
 
-inputBusqueda.addEventListener("input", function () {
-  applySearch(this.value);
-});
+if (inputBusqueda) {
+  inputBusqueda.addEventListener("input", function () {
+    applySearch(this.value);
+  });
+}
 
-botonEncajar.addEventListener("click", function () {
-  if (cy) cy.fit(undefined, 40);
-});
+if (botonVerCompleto) {
+  botonVerCompleto.addEventListener("click", function () {
+    if (cy) cy.fit(undefined, 40);
+  });
+}
 
-botonReset.addEventListener("click", function () {
-  if (!cy) return;
+if (botonReset) {
+  botonReset.addEventListener("click", function () {
+    if (!cy) return;
 
-  cy.zoom(1);
-  cy.center();
-  cy.elements().removeClass("faded highlight");
+    cy.zoom(1);
+    cy.center();
+    cy.elements().removeClass("faded highlight");
 
-  inputBusqueda.value = "";
-  setDefaultDetails();
-});
-
-/* Inicio de la aplicación */
-
-loadGraph();
+    inputBusqueda.value = "";
+    setDefaultDetails();
+  });
+}
