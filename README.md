@@ -56,11 +56,13 @@ Amazon DynamoDB (NoSQL Database)
 4. Lambda devuelve un JSON con la estructura requerida por Cytoscape.js.
 5. El frontend renderiza el grafo interactivo.
 
-6. The user accesses the website hosted on Amazon S3.
-7. The frontend sends an HTTP request to an AWS Lambda function.
-8. Lambda reads the tables from DynamoDB.
-9. Lambda returns a JSON formatted for Cytoscape.js.
-10. The frontend renders the interactive graph.
+---
+
+1. The user accesses the website hosted on Amazon S3.
+2. The frontend sends an HTTP request to an AWS Lambda function.
+3. Lambda reads the tables from DynamoDB.
+4. Lambda returns a JSON formatted for Cytoscape.js.
+5. The frontend renders the interactive graph.
 
 ## Preparación de Datos / Data Preparation
 
