@@ -90,6 +90,14 @@ const MOCK_GRAPH = {
   ],
 };
 
+/* configuración para probar AWS (Lambda Function URL) */
+// Poner en false cuando termine el lab o volver al mock
+const USE_AWS = false;
+
+// URL pública de Lambda (Function URL)
+const FUNCTION_URL =
+  "https://hhcl7s3sf3rpkbxasogkbo2l5u0hwwdt.lambda-url.us-west-2.on.aws/";
+
 /* Navegación: landing - app*/
 
 function startApp() {
@@ -124,16 +132,33 @@ function goToLanding() {
 if (startButton) startButton.addEventListener("click", startApp);
 if (brandTitle) brandTitle.addEventListener("click", goToLanding);
 
-/* Carga del grafo (mock) */
+/* Carga del grafo (mock) o de AWS Lamda*/
 
-function loadGraph() {
-  const elements = MOCK_GRAPH.nodes.concat(MOCK_GRAPH.edges);
-
+async function loadGraph() {
   if (placeholder) placeholder.style.display = "none";
   if (graphArea) graphArea.classList.add("graph-ready");
 
-  if (statusBadge) statusBadge.textContent = "Modo: Mock";
+  if (USE_AWS) {
+    try {
+      const res = await fetch(FUNCTION_URL);
+      if (!res.ok) throw new Error("HTTP " + res.status);
 
+      const graph = await res.json();
+
+      if (statusBadge) statusBadge.textContent = "Modo: AWS (Lambda URL)";
+
+      const elements = graph.nodes.concat(graph.edges);
+      initCytoscape(elements);
+      setDefaultDetails();
+      return;
+    } catch (err) {
+      console.error("Error AWS, usando mock:", err);
+    }
+  }
+
+  // Fallback o modo normal
+  const elements = MOCK_GRAPH.nodes.concat(MOCK_GRAPH.edges);
+  if (statusBadge) statusBadge.textContent = "Modo: Mock";
   initCytoscape(elements);
   setDefaultDetails();
 }
