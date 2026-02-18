@@ -92,11 +92,11 @@ const MOCK_GRAPH = {
 
 /* configuración para probar AWS (Lambda Function URL) */
 // Poner en false cuando termine el lab o volver al mock
-const USE_AWS = false;
+const USE_AWS = true;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
-  "https://hhcl7s3sf3rpkbxasogkbo2l5u0hwwdt.lambda-url.us-west-2.on.aws/";
+  "https://iomm42oofm4jcry24ttdroo7jy0cjbbn.lambda-url.us-west-2.on.aws/";
 
 /* Navegación: landing - app*/
 
@@ -147,7 +147,28 @@ async function loadGraph() {
 
       if (statusBadge) statusBadge.textContent = "Modo: AWS (Lambda URL)";
 
-      const elements = graph.nodes.concat(graph.edges);
+      /* ---- LIMITAR A 100 LIBROS ---- */
+
+      const bookNodes = graph.nodes
+        .filter((n) => n.data.type === "Libro")
+        .slice(0, 100);
+
+      const bookIds = new Set(bookNodes.map((n) => n.data.id));
+
+      const edges = graph.edges.filter((e) => bookIds.has(e.data.source));
+
+      const categoryIds = new Set(edges.map((e) => e.data.target));
+
+      const categoryNodes = graph.nodes.filter((n) =>
+        categoryIds.has(n.data.id),
+      );
+
+      const smallGraph = {
+        nodes: [...bookNodes, ...categoryNodes],
+        edges: edges,
+      };
+
+      const elements = smallGraph.nodes.concat(smallGraph.edges);
       initCytoscape(elements);
       setDefaultDetails();
       return;
