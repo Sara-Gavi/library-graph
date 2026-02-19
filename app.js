@@ -92,7 +92,7 @@ const MOCK_GRAPH = {
 
 /* configuración para probar AWS (Lambda Function URL) */
 // Poner en false cuando termina el lab o volver al mock
-const USE_AWS = true;
+const USE_AWS = false;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
@@ -179,7 +179,9 @@ async function loadGraph() {
 
   // Fallback o modo normal
   const elements = MOCK_GRAPH.nodes.concat(MOCK_GRAPH.edges);
-  if (statusBadge) statusBadge.textContent = "Modo: Mock";
+  if (statusBadge)
+    statusBadge.textContent =
+      "Modo demostración (datos mock · AWS Lambda inactivo)";
   initCytoscape(elements);
   setDefaultDetails();
 }
