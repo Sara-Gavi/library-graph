@@ -5,7 +5,7 @@
    - Gestiona búsqueda, selección de nodos y botones
  */
 
-/*Elementos de la landing y app */
+/* Elementos de la landing y app */
 
 const startButton = document.querySelector(".js-start");
 const landingSection = document.querySelector(".landing");
@@ -31,14 +31,20 @@ let cy = null;
 
 /* 
    Datos mock del grafo
- */
+*/
 
 const MOCK_GRAPH = {
   nodes: [
     { data: { id: "book:dune", label: "Dune", type: "Libro" } },
     { data: { id: "book:1984", label: "1984", type: "Libro" } },
     { data: { id: "book:hp1", label: "Harry Potter", type: "Libro" } },
-    { data: { id: "book:pride", label: "Orgullo y prejuicio", type: "Libro" } },
+    {
+      data: {
+        id: "book:pride",
+        label: "Orgullo y prejuicio",
+        type: "Libro",
+      },
+    },
 
     { data: { id: "cat:scifi", label: "Ciencia ficción", type: "Categoria" } },
     { data: { id: "cat:distopia", label: "Distopía", type: "Categoria" } },
@@ -92,13 +98,13 @@ const MOCK_GRAPH = {
 
 /* configuración para probar AWS (Lambda Function URL) */
 // Poner en false cuando termina el lab o volver al mock
-const USE_AWS = false;
+const USE_AWS = true;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
   "https://gashcwrxjonxvci5gkokikd4a40zwtjh.lambda-url.us-west-2.on.aws/";
 
-/* Navegación: landing - app*/
+/* Navegación: landing - app */
 
 function startApp() {
   if (landingSection) landingSection.style.display = "none";
@@ -132,7 +138,7 @@ function goToLanding() {
 if (startButton) startButton.addEventListener("click", startApp);
 if (brandTitle) brandTitle.addEventListener("click", goToLanding);
 
-/* Carga del grafo (mock) o de AWS Lamda*/
+/* Carga del grafo (mock) o de AWS Lambda */
 
 async function loadGraph() {
   if (placeholder) placeholder.style.display = "none";
@@ -145,7 +151,8 @@ async function loadGraph() {
 
       const graph = await res.json();
 
-      if (statusBadge) statusBadge.textContent = "Modo: AWS (Lambda URL)";
+      if (statusBadge)
+        statusBadge.textContent = "Modo en vivo (AWS Lambda · DynamoDB)";
 
       /* ---- LIMITAR A 100 LIBROS ---- */
 
@@ -174,10 +181,14 @@ async function loadGraph() {
       return;
     } catch (err) {
       console.error("Error AWS, usando mock:", err);
+      // Si falla AWS, mostramos modo demo
+      if (statusBadge)
+        statusBadge.textContent =
+          "Modo demostración (datos mock · AWS Lambda inactivo)";
     }
   }
 
-  // Fallback o modo normal
+  // Fallback o modo normal (mock)
   const elements = MOCK_GRAPH.nodes.concat(MOCK_GRAPH.edges);
   if (statusBadge)
     statusBadge.textContent =
@@ -266,13 +277,12 @@ function initCytoscape(elements) {
   registerNodeClick();
 }
 
+/* Click en nodos: resaltar y mostrar detalles */
+
 function registerNodeClick() {
   cy.on("tap", "node", function (evt) {
     const node = evt.target;
     const data = node.data();
-
-    const label = data.label;
-    const type = data.type;
 
     const neighbors = node
       .connectedEdges()
@@ -287,17 +297,36 @@ function registerNodeClick() {
     node.connectedEdges().removeClass("faded");
     neighbors.removeClass("faded");
 
-    renderDetails(label, type, neighbors);
+    renderDetails(data, neighbors);
   });
 }
 
-function renderDetails(label, type, neighbors) {
+/* Panel de detalles (incluye sinopsis si está disponible en AWS) */
+
+function renderDetails(data, neighbors) {
   if (!panelDetalles) return;
 
   let html = "";
-  html += '<h3 style="margin-bottom:8px;">' + label + "</h3>";
-  html += '<p style="margin-bottom:10px;">' + type + "</p>";
-  html += "<p><strong>Relacionado con:</strong></p>";
+  html += '<h3 style="margin-bottom:8px;">' + data.label + "</h3>";
+  html += '<p style="margin-bottom:6px;">' + data.type + "</p>";
+
+  // Sinopsis solo para libros y solo si viene en los datos (modo AWS)
+  if (data.type === "Libro" && data.synopsis) {
+    const cleanSynopsis = data.synopsis
+      .replace(/\n/g, " ")
+      .replace(/\[.*?\]\(.*?\)/g, "")
+      .trim();
+
+    const shortSynopsis =
+      cleanSynopsis.length > 220
+        ? cleanSynopsis.slice(0, 220).trim() + "..."
+        : cleanSynopsis;
+
+    html += '<p style="margin-top:10px;"><strong>Sinopsis:</strong></p>';
+    html += "<p>" + shortSynopsis + "</p>";
+  }
+
+  html += '<p style="margin-top:12px;"><strong>Relacionado con:</strong></p>';
   html += '<ul style="margin-top:6px; padding-left:18px;">';
 
   neighbors.forEach(function (n) {
@@ -309,7 +338,7 @@ function renderDetails(label, type, neighbors) {
   panelDetalles.innerHTML = html;
 }
 
-/* Búsqueda*/
+/* Búsqueda */
 
 function applySearch(query) {
   if (!cy) return;
@@ -337,7 +366,7 @@ function applySearch(query) {
 
 /* 
    Eventos de botones e input
- */
+*/
 
 if (botonLimpiar) {
   botonLimpiar.addEventListener("click", function () {
