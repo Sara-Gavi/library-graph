@@ -92,11 +92,11 @@ const MOCK_GRAPH = {
 
 /* configuración para probar AWS (Lambda Function URL) */
 // Poner en false cuando termine el lab o volver al mock
-const USE_AWS = true;
+const USE_AWS = false;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
-  "https://iomm42oofm4jcry24ttdroo7jy0cjbbn.lambda-url.us-west-2.on.aws/";
+  "https://gashcwrxjonxvci5gkokikd4a40zwtjh.lambda-url.us-west-2.on.aws/";
 
 /* Navegación: landing - app*/
 
