@@ -74,14 +74,14 @@ This script automates the data insertion into DynamoDB tables.
 
 ## Tecnologías / Technologies
 
-- **HTML5** - Estructura del sitio / Site structure
-- **CSS3** - Diseño cálido estilo biblioteca / Warm library-style design
-- **Vanilla JavaScript** - Lógica de la aplicación / Application logic
-- **Cytoscape.js** - Visualización interactiva del grafo / Interactive graph visualization
 - **Amazon S3** - Hosting estático / Static hosting
 - **AWS Lambda** - Backend serverless
 - **Amazon DynamoDB** - Base de datos NoSQL
 - **Python + boto3** - Automatización de carga de datos
+- **HTML5** - Estructura del sitio / Site structure
+- **CSS3** - Diseño cálido estilo biblioteca / Warm library-style design
+- **Vanilla JavaScript** - Lógica de la aplicación / Application logic
+- **Cytoscape.js** - Visualización interactiva del grafo / Interactive graph visualization
 
 ## Autoría / Authors
 
