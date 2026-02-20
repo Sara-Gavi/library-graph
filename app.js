@@ -102,7 +102,7 @@ const USE_AWS = true;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
-  "https://gashcwrxjonxvci5gkokikd4a40zwtjh.lambda-url.us-west-2.on.aws/";
+  "https://mnlsnvjahi7epaxgye5mw2wdq40xnjnn.lambda-url.us-west-2.on.aws/";
 
 /* Navegación: landing - app */
 
