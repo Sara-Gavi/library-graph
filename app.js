@@ -35,9 +35,16 @@ let cy = null;
 
 const MOCK_GRAPH = {
   nodes: [
+    // Libros
     { data: { id: "book:dune", label: "Dune", type: "Libro" } },
     { data: { id: "book:1984", label: "1984", type: "Libro" } },
-    { data: { id: "book:hp1", label: "Harry Potter", type: "Libro" } },
+    {
+      data: {
+        id: "book:hp1",
+        label: "Harry Potter y la piedra filosofal",
+        type: "Libro",
+      },
+    },
     {
       data: {
         id: "book:pride",
@@ -45,14 +52,91 @@ const MOCK_GRAPH = {
         type: "Libro",
       },
     },
+    { data: { id: "book:ender", label: "El juego de Ender", type: "Libro" } },
+    { data: { id: "book:fundacion", label: "Fundación", type: "Libro" } },
+    { data: { id: "book:neuromante", label: "Neuromante", type: "Libro" } },
+    {
+      data: {
+        id: "book:holmes-estudio",
+        label: "Estudio en escarlata",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:orient-express",
+        label: "Asesinato en el Orient Express",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:nombre-rosa",
+        label: "El nombre de la rosa",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:fahrenheit451",
+        label: "Fahrenheit 451",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:blade-runner",
+        label: "¿Sueñan los androides con ovejas eléctricas?",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:lotr1",
+        label: "El señor de los anillos: La comunidad del anillo",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:hobbit",
+        label: "El hobbit",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:dragon-tatuaje",
+        label: "Los hombres que no amaban a las mujeres",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:da-vinci",
+        label: "El código Da Vinci",
+        type: "Libro",
+      },
+    },
+    {
+      data: {
+        id: "book:sherlock-baskerville",
+        label: "El sabueso de los Baskerville",
+        type: "Libro",
+      },
+    },
 
+    // Categorías
     { data: { id: "cat:scifi", label: "Ciencia ficción", type: "Categoria" } },
     { data: { id: "cat:distopia", label: "Distopía", type: "Categoria" } },
     { data: { id: "cat:fantasia", label: "Fantasía", type: "Categoria" } },
     { data: { id: "cat:clasico", label: "Clásico", type: "Categoria" } },
     { data: { id: "cat:romance", label: "Romance", type: "Categoria" } },
+    { data: { id: "cat:misterio", label: "Misterio", type: "Categoria" } },
+    { data: { id: "cat:crimen", label: "Crimen", type: "Categoria" } },
   ],
   edges: [
+    // Libros de ciencia ficción
     {
       data: {
         id: "e1",
@@ -71,12 +155,96 @@ const MOCK_GRAPH = {
     },
     {
       data: {
+        id: "e6",
+        source: "book:1984",
+        target: "cat:scifi",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e7",
+        source: "book:ender",
+        target: "cat:scifi",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e8",
+        source: "book:fundacion",
+        target: "cat:scifi",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e9",
+        source: "book:neuromante",
+        target: "cat:scifi",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e15",
+        source: "book:fahrenheit451",
+        target: "cat:distopia",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e16",
+        source: "book:fahrenheit451",
+        target: "cat:scifi",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e17",
+        source: "book:blade-runner",
+        target: "cat:scifi",
+        type: "PERTENECE_A",
+      },
+    },
+
+    // Fantasía
+    {
+      data: {
         id: "e3",
         source: "book:hp1",
         target: "cat:fantasia",
         type: "PERTENECE_A",
       },
     },
+    {
+      data: {
+        id: "e18",
+        source: "book:lotr1",
+        target: "cat:fantasia",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e19",
+        source: "book:lotr1",
+        target: "cat:clasico",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e20",
+        source: "book:hobbit",
+        target: "cat:fantasia",
+        type: "PERTENECE_A",
+      },
+    },
+
+    // Clásicos y romance
     {
       data: {
         id: "e4",
@@ -93,12 +261,94 @@ const MOCK_GRAPH = {
         type: "RELACIONADO",
       },
     },
+    {
+      data: {
+        id: "e10",
+        source: "book:nombre-rosa",
+        target: "cat:clasico",
+        type: "RELACIONADO",
+      },
+    },
+
+    // Misterio / crimen
+    {
+      data: {
+        id: "e11",
+        source: "book:holmes-estudio",
+        target: "cat:misterio",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e12",
+        source: "book:orient-express",
+        target: "cat:misterio",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e13",
+        source: "book:orient-express",
+        target: "cat:crimen",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e14",
+        source: "book:nombre-rosa",
+        target: "cat:misterio",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e21",
+        source: "book:dragon-tatuaje",
+        target: "cat:crimen",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e22",
+        source: "book:dragon-tatuaje",
+        target: "cat:misterio",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e23",
+        source: "book:da-vinci",
+        target: "cat:misterio",
+        type: "PERTENECE_A",
+      },
+    },
+    {
+      data: {
+        id: "e24",
+        source: "book:da-vinci",
+        target: "cat:crimen",
+        type: "RELACIONADO",
+      },
+    },
+    {
+      data: {
+        id: "e25",
+        source: "book:sherlock-baskerville",
+        target: "cat:misterio",
+        type: "PERTENECE_A",
+      },
+    },
   ],
 };
 
 /* configuración para probar AWS (Lambda Function URL) */
 // Poner en false cuando termina el lab o volver al mock
-const USE_AWS = true;
+const USE_AWS = false;
 
 // URL pública de Lambda (Function URL)
 const FUNCTION_URL =
