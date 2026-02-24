@@ -37,11 +37,17 @@ Con este proyecto, se busca afianzar conocimientos sobre:
 ## 🏗️ Arquitectura 
 
 Usuario
-↓
+
+⬇️
+
 Amazon S3 (Hosting del Frontend estático: HTML/JS/Cytoscape.js)
-↓
+
+⬇️
+
 AWS Lambda Function URL (Endpoint HTTP público con configuración CORS)
-↓
+
+⬇️
+
 Amazon DynamoDB (Datos NoSQL para nodos y relaciones)
 
 
@@ -116,11 +122,17 @@ Through this project, the team aims to strengthen knowledge in:
 ## Architecture
 
 User
-↓
+
+⬇️
+
 Amazon S3 (Static Frontend Hosting: HTML/JS/Cytoscape.js)
-↓
+
+⬇️
+
 AWS Lambda Function URL (Public HTTP Endpoint with CORS configuration)
-↓
+
+⬇️
+
 Amazon DynamoDB (NoSQL data for nodes and relationships)
 
 ## Data Flow
